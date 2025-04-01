@@ -21,7 +21,7 @@ public class ReportEntity {
     @JoinColumn(name = "house_id", nullable = false)
     private HouseEntity houseEntity;
 
-    @OneToMany(mappedBy = "report", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "reportEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ReportDeviceConsumptionEntity> deviceConsumptions = new ArrayList<>();
 
 }

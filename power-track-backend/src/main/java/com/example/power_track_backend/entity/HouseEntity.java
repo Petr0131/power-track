@@ -17,12 +17,15 @@ public class HouseEntity {
     private Double dayTariff; // ToDo решить использовать ли Double или double
     private Double nightTariff;
 
-    @OneToMany(mappedBy = "house", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserEntity userEntity;
+    @OneToMany(mappedBy = "houseEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DeviceEntity> deviceEntities = new ArrayList<>();
-    @OneToMany(mappedBy = "house", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "houseEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ReportEntity> reportEntities = new ArrayList<>();
-    @OneToMany(mappedBy = "house", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "houseEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RecommendationEntity> recommendationEntities = new ArrayList<>();
-    @OneToMany(mappedBy = "house", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "houseEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AdviceEntity> adviceEntities = new ArrayList<>();
 }
