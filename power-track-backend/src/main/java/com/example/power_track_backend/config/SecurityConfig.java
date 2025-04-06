@@ -35,7 +35,9 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable) // Отключение csrf защиты
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/user/welcome", "/user/new-user").permitAll() // разрешен доступ всем, можно указывать EndPoints через запятую
+                        .requestMatchers("/user/welcome", "/user/new-user",
+                                "/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**"
+                        ).permitAll() // разрешен доступ всем, можно указывать EndPoints через запятую
                         .requestMatchers("/user/test").authenticated())
                 .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
                 .build();
@@ -54,5 +56,4 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
-
 }
