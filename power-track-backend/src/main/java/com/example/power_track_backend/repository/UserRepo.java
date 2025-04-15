@@ -9,6 +9,9 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 public interface UserRepo extends CrudRepository<UserEntity, Long> {
+
+    boolean existsByUsername(String username);
+
     Optional<UserEntity> findByUsername(String username);
 
     @Modifying

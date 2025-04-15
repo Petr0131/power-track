@@ -17,7 +17,7 @@ public class DeviceEntity {
     private DeviceProfile deviceType; // Тип устройства из enum
     private String name;
     private Double devicePower;
-    private Integer averageDailyUsageMinutes; // Время работы в день
+    private Integer averageDailyUsageMinutes; // Время работы в день // ToDo добавить валидацию.
 
     // private String deviceEnergyEfficiency; // ToDo решить стоит ли оставить данное поле.
     @ManyToOne

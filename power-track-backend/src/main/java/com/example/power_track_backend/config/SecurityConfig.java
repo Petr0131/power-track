@@ -19,7 +19,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     // Заготовки некоторых аккаунтов с определенными правами доступа. В виде хардКода.
-    // Настройка доступа по ролям на сайте. 20.
+    // Настройка доступа по ролям на сайте. 20мин.
     @Bean
     public UserDetailsService userDetailsService(){
 
@@ -33,14 +33,24 @@ public class SecurityConfig {
     // Настройка фильтров доступа относительно конкретных точек
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http.csrf(AbstractHttpConfigurer::disable) // Отключение csrf защиты
+        return http
+                // Отключаем CSRF-защиту
+                .csrf(AbstractHttpConfigurer::disable)
+                // Разрешаем доступ ко всем запросам без проверки
+                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
+                // Отключаем форму логина, чтобы не происходил редирект на страницу авторизации
+                .formLogin(AbstractHttpConfigurer::disable)
+                .build();
+
+        // ToDo Позже применить конфигурацию ниже для тестирования авторизации.
+        /*return http.csrf(AbstractHttpConfigurer::disable) // Отключение csrf защиты
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/user/welcome", "/user/new-user",
                                 "/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**"
                         ).permitAll() // разрешен доступ всем, можно указывать EndPoints через запятую
                         .requestMatchers("/user/test").authenticated())
                 .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
-                .build();
+                .build();*/
     }
 
     // Компонент механизма аутентификации
