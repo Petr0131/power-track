@@ -4,9 +4,9 @@ public class HouseDto {
     private Long id;
     private String name;
     private Integer rooms;
-    private Integer residents; // ToDo решить использовать ли Integer или int
-    private Double dayTariff; // ToDo решить использовать ли Double или double
-    private Double nightTariff; // ToDo решить использовать ли Double или double
+    private Integer residents;
+    private Double dayTariff;
+    private Double nightTariff;
 
 
     public Long getId() {

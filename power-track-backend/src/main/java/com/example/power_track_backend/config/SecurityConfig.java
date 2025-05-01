@@ -19,7 +19,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     // Заготовки некоторых аккаунтов с определенными правами доступа. В виде хардКода.
-    // Настройка доступа по ролям на сайте. 20мин.
+    // Настройка доступа по ролям. 20мин.
     @Bean
     public UserDetailsService userDetailsService(){
 
@@ -42,7 +42,6 @@ public class SecurityConfig {
                 .formLogin(AbstractHttpConfigurer::disable)
                 .build();
 
-        // ToDo Позже применить конфигурацию ниже для тестирования авторизации.
         /*return http.csrf(AbstractHttpConfigurer::disable) // Отключение csrf защиты
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/user/welcome", "/user/new-user",

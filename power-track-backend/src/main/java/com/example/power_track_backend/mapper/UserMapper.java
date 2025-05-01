@@ -19,5 +19,5 @@ public interface UserMapper {
 
     // UserDto toUserDtoDetails(UserEntity userEntity);
 
-    // UserEntity toEntity(UserDto userDto); // Todo Вряд ли мне это пригодиться.
+    // UserEntity toEntity(UserDto userDto);
 }

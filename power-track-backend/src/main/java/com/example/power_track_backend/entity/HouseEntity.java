@@ -6,16 +6,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "houses")
+@Table(name = "houses",
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "name"})
+                // Строка выше гарантирует уникальность комбинации айди пользователя и имени дома,
+                // Это позволяет иметь уникальные имена домов у одного пользователя, при этом у других они могут встречаться.
+})
 public class HouseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name; // Todo сделать требование чтобы это поле было уникальным.
+    private String name;
     private Integer rooms;
-    private Integer residents; // ToDo решить использовать ли Integer или int
-    private Double dayTariff; // ToDo решить использовать ли Double или double
-    private Double nightTariff; // ToDo решить использовать ли Double или double
+    private Integer residents;
+    private Double dayTariff;
+    private Double nightTariff;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
@@ -28,4 +32,92 @@ public class HouseEntity {
     private List<RecommendationEntity> recommendationEntities = new ArrayList<>();
     @OneToMany(mappedBy = "houseEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AdviceEntity> adviceEntities = new ArrayList<>();
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Integer getRooms() {
+        return rooms;
+    }
+
+    public void setRooms(Integer rooms) {
+        this.rooms = rooms;
+    }
+
+    public Integer getResidents() {
+        return residents;
+    }
+
+    public void setResidents(Integer residents) {
+        this.residents = residents;
+    }
+
+    public Double getDayTariff() {
+        return dayTariff;
+    }
+
+    public void setDayTariff(Double dayTariff) {
+        this.dayTariff = dayTariff;
+    }
+
+    public Double getNightTariff() {
+        return nightTariff;
+    }
+
+    public void setNightTariff(Double nightTariff) {
+        this.nightTariff = nightTariff;
+    }
+
+    public UserEntity getUserEntity() {
+        return userEntity;
+    }
+
+    public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
+    }
+
+    public List<DeviceEntity> getDeviceEntities() {
+        return deviceEntities;
+    }
+
+    public void setDeviceEntities(List<DeviceEntity> deviceEntities) {
+        this.deviceEntities = deviceEntities;
+    }
+
+    public List<ReportEntity> getReportEntities() {
+        return reportEntities;
+    }
+
+    public void setReportEntities(List<ReportEntity> reportEntities) {
+        this.reportEntities = reportEntities;
+    }
+
+    public List<RecommendationEntity> getRecommendationEntities() {
+        return recommendationEntities;
+    }
+
+    public void setRecommendationEntities(List<RecommendationEntity> recommendationEntities) {
+        this.recommendationEntities = recommendationEntities;
+    }
+
+    public List<AdviceEntity> getAdviceEntities() {
+        return adviceEntities;
+    }
+
+    public void setAdviceEntities(List<AdviceEntity> adviceEntities) {
+        this.adviceEntities = adviceEntities;
+    }
 }

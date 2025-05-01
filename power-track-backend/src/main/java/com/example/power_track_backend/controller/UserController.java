@@ -16,23 +16,18 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 // @CrossOrigin(origins = "http://localhost:3000")  // Указываем фронтенд
 public class UserController {
+
+    private final UserService userService;
+
     @Autowired
-    private UserService userService;
-
-    @GetMapping("/welcome")
-    public String welcome(){
-        return "Welcome to unprotected page";
+    public UserController(UserService userService){
+        this.userService = userService;
     }
 
-    @GetMapping("/test")
-    public String test(){
-        return "Welcome to test page";
-    }
-
-    @PostMapping("/new-user")
+    @PostMapping
     public ResponseEntity<CommonResponse<UserDto>> registerUser(@Valid @RequestBody UserRegisterDto userRegisterDto) {
             UserDto userDto = userService.registerUser(userRegisterDto);
 
@@ -41,8 +36,8 @@ public class UserController {
                     userDto // Возвращаем Dto
             ));
     }
-    @GetMapping
-    public ResponseEntity<CommonResponse<UserDto>> getUserByUsername(@RequestParam String username){
+    @GetMapping("/{username}")
+    public ResponseEntity<CommonResponse<UserDto>> getUserByUsername(@PathVariable String username){
             UserDto userDto = userService.getUserByUsername(username); // Получаем DTO из сервиса
 
             return ResponseEntity.ok(CommonResponse.success(
@@ -51,17 +46,17 @@ public class UserController {
             ));
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/{username}")
     @Transactional
-    public ResponseEntity<CommonResponse<UserDto>> deleteUserByUsername(
-            @RequestParam String username,
+    public ResponseEntity<CommonResponse<String>> deleteUserByUsername(
+            @PathVariable String username,
             @RequestParam String password
     ){
-        UserDto userDto = userService.deleteUserByUsername(username, password);
+        String deletedUsername = userService.deleteUserByUsername(username, password);
 
         return ResponseEntity.ok(CommonResponse.success(
                 HttpStatus.OK.value(),
-                userDto
+                deletedUsername
         ));
     }
 }
