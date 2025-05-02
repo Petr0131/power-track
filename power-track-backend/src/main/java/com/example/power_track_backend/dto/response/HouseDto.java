@@ -8,7 +8,6 @@ public class HouseDto {
     private Double dayTariff;
     private Double nightTariff;
 
-
     public Long getId() {
         return id;
     }

@@ -8,7 +8,6 @@ import org.mapstruct.MappingConstants;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING) //  указание componentModel сделает маппер Spring-бином, и его можно будет внедрять через @Autowired.
 public interface UserMapper {
-
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "role", ignore = true)
     @Mapping(target = "houseDtoList", ignore = true)
@@ -16,8 +15,4 @@ public interface UserMapper {
 
     @Mapping(target = "houseDtoList", ignore = true)
     UserDto toUserDtoSummary(UserEntity userEntity);
-
-    // UserDto toUserDtoDetails(UserEntity userEntity);
-
-    // UserEntity toEntity(UserDto userDto);
 }

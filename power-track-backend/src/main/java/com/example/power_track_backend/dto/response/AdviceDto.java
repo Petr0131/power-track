@@ -1,15 +1,7 @@
-package com.example.power_track_backend.entity;
+package com.example.power_track_backend.dto.response;
 
-import jakarta.persistence.*;
-
-@Entity
-@Table(name = "advices")
-public class AdviceEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class AdviceDto {
     private Long id;
-    @Column(nullable = false)
     private String message;
 
     public Long getId() {

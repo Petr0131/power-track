@@ -8,14 +8,11 @@ import org.mapstruct.MappingConstants;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface HouseMapper {
-
     HouseDto toDto(HouseEntity houseEntity);
 
-    /*@Mapping(target = "userEntity", ignore = true)
+    @Mapping(target = "userEntity", ignore = true)
     @Mapping(target = "deviceEntities", ignore = true)
     @Mapping(target = "reportEntities", ignore = true)
     @Mapping(target = "recommendationEntities", ignore = true)
-    @Mapping(target = "adviceEntities", ignore = true)*/
     HouseEntity toEntity(HouseDto houseDto);
-
 }

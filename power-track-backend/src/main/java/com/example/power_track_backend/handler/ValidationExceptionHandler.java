@@ -26,7 +26,7 @@ public class ValidationExceptionHandler {
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<CommonResponse<?>> handlePathValidationException(ConstraintViolationException ex) {
+    public ResponseEntity<CommonResponse<?>> handleParamAndPathValidationException(ConstraintViolationException ex) {
         String errorMessage = ex.getConstraintViolations().stream()
                 .map(violation -> violation.getPropertyPath() + ": " + violation.getMessage())
                 .collect(Collectors.joining("; "));

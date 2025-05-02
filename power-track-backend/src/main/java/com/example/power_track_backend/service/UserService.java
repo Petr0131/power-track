@@ -40,14 +40,14 @@ public class UserService {
         return userMapper.toDto(user);
     }
 
-    public UserDto getUserByUsername(String username) throws UserNotFoundException {
+    public UserDto getUserByUsername(String username) {
 
         UserEntity user = userRepo.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException("User not found with username: " + username));
         return userMapper.toDto(user);
     }
 
-    public String deleteUserByUsername(String username, String password) throws UserNotFoundException, InvalidPasswordException {
+    public String deleteUserByUsername(String username, String password) {
         UserEntity user = userRepo.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException("User not found with username: " + username));
 

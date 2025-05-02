@@ -1,26 +1,16 @@
-package com.example.power_track_backend.entity;
+package com.example.power_track_backend.dto.response;
 
-import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-@Entity
-@Table(name = "report_device_consumptions")
-public class ReportDeviceConsumptionEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+@JsonPropertyOrder({"id", "deviceId", "deviceName"})
+public class ReportDeviceConsumptionDto {
     private Long id;
-
     private Double totalConsumption;
     private Double dayConsumption;
     private Double nightConsumption;
     private Double estimatedCost; // Затраты этого прибора
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "report_id", nullable = false)
-    private  ReportEntity reportEntity;
-    @ManyToOne
-    @JoinColumn(name = "device_id", nullable = false)
-    private DeviceEntity deviceEntity;
+    private Long deviceId;
+    private String deviceName;
 
     public Long getId() {
         return id;
@@ -61,20 +51,20 @@ public class ReportDeviceConsumptionEntity {
     public void setEstimatedCost(Double estimatedCost) {
         this.estimatedCost = estimatedCost;
     }
-
-    public ReportEntity getReportEntity() {
-        return reportEntity;
+    
+    public Long getDeviceId() {
+        return deviceId;
     }
 
-    public void setReportEntity(ReportEntity reportEntity) {
-        this.reportEntity = reportEntity;
+    public void setDeviceId(Long deviceId) {
+        this.deviceId = deviceId;
     }
 
-    public DeviceEntity getDeviceEntity() {
-        return deviceEntity;
+    public String getDeviceName() {
+        return deviceName;
     }
 
-    public void setDeviceEntity(DeviceEntity deviceEntity) {
-        this.deviceEntity = deviceEntity;
+    public void setDeviceName(String deviceName) {
+        this.deviceName = deviceName;
     }
 }

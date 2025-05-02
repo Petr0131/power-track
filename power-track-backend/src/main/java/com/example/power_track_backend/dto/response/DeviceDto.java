@@ -1,21 +1,32 @@
 package com.example.power_track_backend.dto.response;
 
 import com.example.power_track_backend.DeviceProfile;
+import com.example.power_track_backend.EnergyEfficiencyCategory;
 
 public class DeviceDto {
-    private DeviceProfile deviceType; // Тип устройства из enum
+
+    private Long id;
+    private DeviceProfile deviceProfile; // Тип устройства из enum
     private String name;
-    private Double devicePower;
+    private Integer power;
+    private Integer Count;
     private Integer averageDailyUsageMinutes; // Время работы в день // ToDo добавить валидацию.
+    private EnergyEfficiencyCategory energyEfficiency; // ToDo решить стоит ли оставить данное поле.
 
-    // private String deviceEnergyEfficiency; // ToDo решить стоит ли оставить данное поле.
-
-    public DeviceProfile getDeviceType() {
-        return deviceType;
+    public Long getId() {
+        return id;
     }
 
-    public void setDeviceType(DeviceProfile deviceType) {
-        this.deviceType = deviceType;
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public DeviceProfile getDeviceProfile() {
+        return deviceProfile;
+    }
+
+    public void setDeviceProfile(DeviceProfile deviceProfile) {
+        this.deviceProfile = deviceProfile;
     }
 
     public String getName() {
@@ -26,12 +37,20 @@ public class DeviceDto {
         this.name = name;
     }
 
-    public Double getDevicePower() {
-        return devicePower;
+    public Integer getPower() {
+        return power;
     }
 
-    public void setDevicePower(Double devicePower) {
-        this.devicePower = devicePower;
+    public void setPower(Integer power) {
+        this.power = power;
+    }
+
+    public Integer getCount() {
+        return Count;
+    }
+
+    public void setCount(Integer count) {
+        Count = count;
     }
 
     public Integer getAverageDailyUsageMinutes() {
@@ -40,5 +59,13 @@ public class DeviceDto {
 
     public void setAverageDailyUsageMinutes(Integer averageDailyUsageMinutes) {
         this.averageDailyUsageMinutes = averageDailyUsageMinutes;
+    }
+
+    public EnergyEfficiencyCategory getEnergyEfficiency() {
+        return energyEfficiency;
+    }
+
+    public void setEnergyEfficiency(EnergyEfficiencyCategory energyEfficiency) {
+        this.energyEfficiency = energyEfficiency;
     }
 }

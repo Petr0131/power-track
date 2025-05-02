@@ -30,8 +30,6 @@ public class HouseEntity {
     private List<ReportEntity> reportEntities = new ArrayList<>();
     @OneToMany(mappedBy = "houseEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RecommendationEntity> recommendationEntities = new ArrayList<>();
-    @OneToMany(mappedBy = "houseEntity", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<AdviceEntity> adviceEntities = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -111,13 +109,5 @@ public class HouseEntity {
 
     public void setRecommendationEntities(List<RecommendationEntity> recommendationEntities) {
         this.recommendationEntities = recommendationEntities;
-    }
-
-    public List<AdviceEntity> getAdviceEntities() {
-        return adviceEntities;
-    }
-
-    public void setAdviceEntities(List<AdviceEntity> adviceEntities) {
-        this.adviceEntities = adviceEntities;
     }
 }

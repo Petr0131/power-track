@@ -25,7 +25,7 @@ public class HouseController {
 
         return ResponseEntity.ok(CommonResponse.success(
                 HttpStatus.OK.value(),
-                newHouseDto // Возвращаем Dto
+                newHouseDto
         ));
     }
 
@@ -35,7 +35,7 @@ public class HouseController {
 
         return ResponseEntity.ok(CommonResponse.success(
                 HttpStatus.OK.value(),
-                houseDto // Возвращаем Dto
+                houseDto
         ));
     }
 
@@ -47,7 +47,7 @@ public class HouseController {
 
         return ResponseEntity.ok(CommonResponse.success(
                 HttpStatus.OK.value(),
-                houseDto // Возвращаем Dto
+                houseDto
         ));
     }
 
@@ -57,7 +57,7 @@ public class HouseController {
 
         return ResponseEntity.ok(CommonResponse.success(
                 HttpStatus.OK.value(),
-                houseDtoList // Возвращаем Dto
+                houseDtoList
         ));
     }
 
@@ -67,7 +67,7 @@ public class HouseController {
 
         return ResponseEntity.ok(CommonResponse.success(
                 HttpStatus.OK.value(),
-                houseDto // Возвращаем Dto
+                houseDto
         ));
     }
 
@@ -77,7 +77,7 @@ public class HouseController {
 
         return ResponseEntity.ok(CommonResponse.success(
                 HttpStatus.OK.value(),
-                message // Возвращаем сообщение об успешном удалении
+                message
         ));
     }
 }

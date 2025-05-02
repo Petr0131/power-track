@@ -3,10 +3,6 @@ package com.example.power_track_backend.controller;
 import com.example.power_track_backend.dto.request.UserRegisterDto;
 import com.example.power_track_backend.dto.response.CommonResponse;
 import com.example.power_track_backend.dto.response.UserDto;
-import com.example.power_track_backend.entity.UserEntity;
-import com.example.power_track_backend.exception.UserAlreadyExistException;
-import com.example.power_track_backend.exception.UserNotFoundException;
-import com.example.power_track_backend.mapper.UserMapper;
 import com.example.power_track_backend.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +29,7 @@ public class UserController {
 
             return ResponseEntity.ok(CommonResponse.success(
                     HttpStatus.OK.value(),
-                    userDto // Возвращаем Dto
+                    userDto
             ));
     }
     @GetMapping("/{username}")
@@ -42,7 +38,7 @@ public class UserController {
 
             return ResponseEntity.ok(CommonResponse.success(
                     HttpStatus.OK.value(),
-                    userDto // Возвращаем Dto
+                    userDto
             ));
     }
 

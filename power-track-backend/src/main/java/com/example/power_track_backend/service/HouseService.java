@@ -63,13 +63,23 @@ public class HouseService {
         return houseMapper.toDto(house);
     }
 
+    public List<HouseDto> getHouseListByUserId(Long userId) {
+        // Получаем список домов из репозитория
+        List<HouseEntity> houseEntities = houseRepo.findAllByUserEntityId(userId);
+
+        // Преобразуем сущности в DTO
+        return houseEntities.stream()
+                .map(houseMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
     public HouseDto updateHouse(Long id, HouseDto houseDto) {
         // Находим существующий дом по ID
         HouseEntity house = houseRepo.findById(id)
                 .orElseThrow(() -> new HouseNotFoundException("House not found with id: " + id));
 
-        // Проверяем, что новое имя дома уникально (если оно изменилось)
-        if (!house.getName().equals(houseDto.getName()) && houseRepo.existsByName(houseDto.getName())) {
+        // Проверяем, что новое имя дома уникально для пользователя за которым оно закреплено(если оно изменилось)
+        if (!house.getName().equals(houseDto.getName()) && houseRepo.existsByNameAndUserEntityId(houseDto.getName(), house.getUserEntity().getId())) {
             throw new HouseAlreadyExistException("House with name '" + houseDto.getName() + "' already exists");
         }
 
@@ -83,16 +93,6 @@ public class HouseService {
         HouseEntity updatedHouse = houseRepo.save(house);
 
         return houseMapper.toDto(updatedHouse);
-    }
-
-    public List<HouseDto> getHouseListByUserId(Long userId) {
-        // Получаем список домов из репозитория
-        List<HouseEntity> houseEntities = houseRepo.findAllByUserEntityId(userId);
-
-        // Преобразуем сущности в DTO
-        return houseEntities.stream()
-                .map(houseMapper::toDto)
-                .collect(Collectors.toList());
     }
 
     @Transactional

@@ -1,9 +1,7 @@
 package com.example.power_track_backend.dto.response;
 
 // Todo Решить стоит ли разделять на UserSummaryDto и UserDetailsDto.
-// Todo Обдумать стоит ли с моделями передавать списки моделей других сущностей. Пример - private List<HouseDto> houses; Или лучше делать отдельный вызов.
 
-import com.example.power_track_backend.entity.HouseEntity;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.ArrayList;
@@ -16,7 +14,7 @@ public class UserDto {
     private Long id;
     private String username;
     private String role;
-    private List<HouseDto> houseDtoList = new ArrayList<>(); // Todo решить будут ли в DTO списки. Скорее всего - нет.
+    private List<HouseDto> houseDtoList = new ArrayList<>();
 
     public Long getId() {
         return id;

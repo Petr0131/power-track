@@ -1,12 +1,28 @@
 package com.example.power_track_backend.dto.response;
 
-import java.time.LocalDate;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import java.time.LocalDate;
+import java.util.List;
+
+@JsonPropertyOrder({"id", "houseId"})
 public class ReportDto {
+
+    private Long id;
     private LocalDate startDate;
     private LocalDate endDate;
     private Double totalConsumption;
     private Double totalCost;
+    private Long houseId;
+    private List<ReportDeviceConsumptionDto> deviceConsumptions;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public LocalDate getStartDate() {
         return startDate;
@@ -38,5 +54,21 @@ public class ReportDto {
 
     public void setTotalCost(Double totalCost) {
         this.totalCost = totalCost;
+    }
+
+    public List<ReportDeviceConsumptionDto> getDeviceConsumptions() {
+        return deviceConsumptions;
+    }
+
+    public void setDeviceConsumptions(List<ReportDeviceConsumptionDto> deviceConsumptions) {
+        this.deviceConsumptions = deviceConsumptions;
+    }
+
+    public Long getHouseId() {
+        return houseId;
+    }
+
+    public void setHouseId(Long houseId) {
+        this.houseId = houseId;
     }
 }
