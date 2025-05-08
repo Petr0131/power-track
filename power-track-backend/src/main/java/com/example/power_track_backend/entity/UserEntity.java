@@ -1,5 +1,6 @@
 package com.example.power_track_backend.entity;
 
+import com.example.power_track_backend.CurrencyType;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -15,6 +16,8 @@ public class UserEntity {
     private String username;
     private String password;
     private String role;
+    @Enumerated(EnumType.STRING)
+    private CurrencyType currencyType;
 
     @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<HouseEntity> houseEntities = new ArrayList<>();
@@ -46,6 +49,14 @@ public class UserEntity {
     public String getRole() { return role; }
 
     public void setRole(String role) { this.role = role; }
+
+    public CurrencyType getCurrencyType() {
+        return currencyType;
+    }
+
+    public void setCurrencyType(CurrencyType currencyType) {
+        this.currencyType = currencyType;
+    }
 
     public List<HouseEntity> getHouseEntities() {
         return houseEntities;
