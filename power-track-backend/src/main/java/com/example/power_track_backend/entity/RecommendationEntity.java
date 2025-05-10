@@ -18,7 +18,7 @@ public class RecommendationEntity {
     private HouseEntity houseEntity;
     @ManyToOne
     @JoinColumn(name = "report_id", nullable = false)
-    private ReportEntity reportEntity; // Todo возможно потребуется пересоздать бд тк связь может не появиться
+    private ReportEntity reportEntity;
     @ManyToOne
     @JoinColumn(name = "device_id") // Может быть null, например если рекомендация для дома в целом.
     private DeviceEntity deviceEntity;

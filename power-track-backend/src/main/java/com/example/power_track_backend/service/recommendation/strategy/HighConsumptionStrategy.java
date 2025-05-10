@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class HighConsumptionStrategy extends AbstractStrategy {
-
     private final HighConsumptionSpecification highConsumptionSpecification;
     private final RecommendationFactory recommendationFactory;
 
@@ -38,7 +37,7 @@ public class HighConsumptionStrategy extends AbstractStrategy {
         String userCurrencySymbol = report.getHouseEntity().getUserEntity().getCurrencyType().getSymbol();
 
         String messageTemplate =
-                        "$Устройство %s имеет высокое энергопотребление (%s кВт). " +
+                        "Устройство %s имеет высокое энергопотребление (%s кВт). " +
                         "Рекомендуется оптимизировать его использование за счет снижения мощности/частоты использования. " +
                         "Потенциальная экономия составит - %s %s в месяц.";
 
@@ -47,6 +46,7 @@ public class HighConsumptionStrategy extends AbstractStrategy {
         return recommendationFactory.createBaseRecommendation(report, device, formattedMessage, potentialSavings, priority);
     }
 
+    // ToDo возможно стоит вынести calculatePotentialSavings из всех стратегий.
     private Double calculatePotentialSavings(DeviceEntity device) {
 
         HouseEntity house = device.getHouseEntity(); // ToDo возможно все таки стоит явно передавать сущность дома в метод. тк возможно нарушение SRP

@@ -33,7 +33,6 @@ public abstract class AbstractStrategy implements Strategy {
                 recommendations.add(recommendationMapper.toDto(savedRecommendation));
             }
         }
-
         return recommendations;
     }
 

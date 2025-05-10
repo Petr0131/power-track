@@ -4,7 +4,9 @@ import com.example.power_track_backend.RecommendationPriority;
 import com.example.power_track_backend.entity.DeviceEntity;
 import com.example.power_track_backend.entity.RecommendationEntity;
 import com.example.power_track_backend.entity.ReportEntity;
+import org.springframework.stereotype.Component;
 
+@Component
 public class RecommendationFactory {
     public RecommendationEntity createBaseRecommendation(ReportEntity report, DeviceEntity device, String formattedMessage, Double potentialSavings, RecommendationPriority priority) {
 

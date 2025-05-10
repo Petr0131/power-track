@@ -12,9 +12,10 @@ import com.example.power_track_backend.service.recommendation.RecommendationFact
 import com.example.power_track_backend.service.recommendation.specification.HighConsumptionSpecification;
 import com.example.power_track_backend.service.recommendation.specification.LowEfficiencySpecification;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class LowEfficiencyHighConsumptionStrategy extends AbstractStrategy {
-
     private final LowEfficiencySpecification lowEfficiencySpecification;
     private final HighConsumptionSpecification highConsumptionSpecification;
     private final RecommendationFactory recommendationFactory;

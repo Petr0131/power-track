@@ -2,8 +2,6 @@ package com.example.power_track_backend.controller;
 
 import com.example.power_track_backend.dto.response.CommonResponse;
 import com.example.power_track_backend.dto.response.RecommendationDto;
-import com.example.power_track_backend.dto.response.ReportDto;
-import com.example.power_track_backend.entity.RecommendationEntity;
 import com.example.power_track_backend.service.recommendation.RecommendationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
