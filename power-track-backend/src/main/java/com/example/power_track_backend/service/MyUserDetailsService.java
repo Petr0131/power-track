@@ -16,7 +16,7 @@ public class MyUserDetailsService implements UserDetailsService {
     private UserRepo userRepo;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public MyUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<UserEntity> userEntity = userRepo.findByUsername(username);
         return userEntity.map(MyUserDetails::new)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
