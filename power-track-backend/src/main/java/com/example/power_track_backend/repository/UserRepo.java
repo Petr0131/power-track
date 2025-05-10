@@ -10,9 +10,7 @@ import java.util.Optional;
 
 public interface UserRepo extends CrudRepository<UserEntity, Long> {
     boolean existsByUsername(String username);
-
     Optional<UserEntity> findByUsername(String username);
-
     @Modifying
     @Query("DELETE FROM UserEntity u WHERE u.username = :username")
     void deleteByUsername(@Param("username") String username);

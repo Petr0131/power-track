@@ -2,16 +2,18 @@ package com.example.power_track_backend.dto.response;
 
 import com.example.power_track_backend.DeviceProfile;
 import com.example.power_track_backend.EnergyEfficiencyCategory;
+import com.example.power_track_backend.UsageTimePeriod;
 
 public class DeviceDto {
 
     private Long id;
-    private DeviceProfile deviceProfile; // Тип устройства из enum
+    private DeviceProfile deviceProfile;
     private String name;
     private Integer power;
     private Integer Count;
     private Integer averageDailyUsageMinutes; // Время работы в день // ToDo добавить валидацию.
-    private EnergyEfficiencyCategory energyEfficiency; // ToDo решить стоит ли оставить данное поле.
+    private EnergyEfficiencyCategory energyEfficiency;
+    private UsageTimePeriod usageTimePeriod;
 
     public Long getId() {
         return id;
@@ -67,5 +69,13 @@ public class DeviceDto {
 
     public void setEnergyEfficiency(EnergyEfficiencyCategory energyEfficiency) {
         this.energyEfficiency = energyEfficiency;
+    }
+
+    public UsageTimePeriod getUsageTimePeriod() {
+        return usageTimePeriod;
+    }
+
+    public void setUsageTimePeriod(UsageTimePeriod usageTimePeriod) {
+        this.usageTimePeriod = usageTimePeriod;
     }
 }

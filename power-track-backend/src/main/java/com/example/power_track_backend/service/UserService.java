@@ -1,5 +1,6 @@
 package com.example.power_track_backend.service;
 
+import com.example.power_track_backend.CurrencyType;
 import com.example.power_track_backend.dto.request.UserRegisterDto;
 import com.example.power_track_backend.dto.response.UserDto;
 import com.example.power_track_backend.entity.UserEntity;
@@ -9,8 +10,12 @@ import com.example.power_track_backend.exception.UserNotFoundException;
 import com.example.power_track_backend.mapper.UserMapper;
 import com.example.power_track_backend.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
+import java.util.function.Consumer;
 
 @Service
 public class UserService {
@@ -31,10 +36,14 @@ public class UserService {
             throw new UserAlreadyExistException("User with this username already exists");
         }
 
+        //ToDo код ниже следует вынести в маппер.
         UserEntity user = new UserEntity();
         user.setUsername(userRegisterDto.getUsername());
+        user.setRole(userRegisterDto.getRole());
+
         // Модификация passwordEncoder
         user.setPassword(passwordEncoder.encode(userRegisterDto.getPassword()));
+        user.setCurrencyType(userRegisterDto.getCurrencyType());
 
         userRepo.save(user);
         return userMapper.toDto(user);
@@ -60,4 +69,38 @@ public class UserService {
         return user.getUsername();
     }
 
+    public UserDto updateUserPartially(String username, Map<String, Object> updates) {
+        // Находим пользователя по имени
+        UserEntity userEntity = userRepo.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
+
+        // Создаем мапу обработчиков для каждого поля
+        Map<String, Consumer<Object>> fieldUpdaters = Map.of(
+                "password", value -> userEntity.setPassword(passwordEncoder.encode(value.toString())),
+                "role", value -> userEntity.setRole(value.toString()),
+                "currencyType", value -> {
+                    try {
+                        userEntity.setCurrencyType(CurrencyType.valueOf(value.toString().toUpperCase()));
+                    } catch (IllegalArgumentException e) {
+                        throw new IllegalArgumentException("Invalid currency type: " + value);
+                    }
+                }
+        );
+
+        // Обновляем поля пользователя на основе входных данных
+        updates.forEach((key, value) -> {
+            Consumer<Object> updater = fieldUpdaters.get(key);
+            if (updater != null) {
+                updater.accept(value);
+            } else {
+                throw new IllegalArgumentException("Invalid field: " + key);
+            }
+        });
+
+        // Сохраняем обновленного пользователя в базе данных
+        UserEntity updatedUserEntity = userRepo.save(userEntity);
+
+        // Преобразуем сущность в DTO и возвращаем
+        return userMapper.toDto(updatedUserEntity);
+    }
 }

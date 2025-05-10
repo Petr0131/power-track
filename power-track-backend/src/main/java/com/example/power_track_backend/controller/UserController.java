@@ -11,9 +11,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/users")
-// @CrossOrigin(origins = "http://localhost:3000")  // Указываем фронтенд
 public class UserController {
 
     private final UserService userService;
@@ -23,15 +24,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping
-    public ResponseEntity<CommonResponse<UserDto>> registerUser(@Valid @RequestBody UserRegisterDto userRegisterDto) {
-            UserDto userDto = userService.registerUser(userRegisterDto);
-
-            return ResponseEntity.ok(CommonResponse.success(
-                    HttpStatus.OK.value(),
-                    userDto
-            ));
-    }
     @GetMapping("/{username}")
     public ResponseEntity<CommonResponse<UserDto>> getUserByUsername(@PathVariable String username){
             UserDto userDto = userService.getUserByUsername(username); // Получаем DTO из сервиса
@@ -53,6 +45,20 @@ public class UserController {
         return ResponseEntity.ok(CommonResponse.success(
                 HttpStatus.OK.value(),
                 deletedUsername
+        ));
+    }
+
+    @PatchMapping("/{username}")
+    @Transactional
+    public ResponseEntity<CommonResponse<UserDto>> updateUserPartially(
+            @PathVariable String username,
+            @RequestBody Map<String, Object> updates) {
+
+        UserDto updatedUserDto = userService.updateUserPartially(username, updates);
+
+        return ResponseEntity.ok(CommonResponse.success(
+                HttpStatus.OK.value(),
+                updatedUserDto
         ));
     }
 }

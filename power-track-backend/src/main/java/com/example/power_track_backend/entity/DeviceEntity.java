@@ -20,14 +20,14 @@ public class DeviceEntity {
     private Long id;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private DeviceProfile deviceProfile; // Тип устройства из enum
+    private DeviceProfile deviceProfile;
     private String name;
     private Integer power;
     private Integer count;
     private Integer averageDailyUsageMinutes; // Время работы в день // ToDo добавить валидацию.
-    private EnergyEfficiencyCategory energyEfficiency; // ToDo решить стоит ли оставить данное поле.
+    private EnergyEfficiencyCategory energyEfficiency;
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    // @Column(nullable = false)
     private UsageTimePeriod usageTimePeriod; // ToDo нужно будет указать значение по умолчанию.
 
     @ManyToOne

@@ -9,10 +9,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/users/{userId}/houses")
-// @CrossOrigin(origins = "http://localhost:3000")  // Указываем фронтенд
 public class HouseController {
     @Autowired
     HouseService houseService;
@@ -20,7 +20,7 @@ public class HouseController {
     @PostMapping
     public ResponseEntity<CommonResponse<HouseDto>> addHouseToUser(
             @PathVariable Long userId,
-            @RequestBody HouseDto houseDto) { // Todo Убрать 1 из названия houseDto1
+            @RequestBody HouseDto houseDto) {
         HouseDto newHouseDto = houseService.addHouseToUser(userId, houseDto);
 
         return ResponseEntity.ok(CommonResponse.success(
@@ -61,16 +61,6 @@ public class HouseController {
         ));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<CommonResponse<HouseDto>> updateHouse(@PathVariable Long id, @RequestBody HouseDto house) {
-        HouseDto houseDto = houseService.updateHouse(id, house);
-
-        return ResponseEntity.ok(CommonResponse.success(
-                HttpStatus.OK.value(),
-                houseDto
-        ));
-    }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<CommonResponse<String>> deleteHouse(@PathVariable Long id) {
         String message = houseService.deleteHouseById(id);
@@ -80,4 +70,27 @@ public class HouseController {
                 message
         ));
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CommonResponse<HouseDto>> updateHouse(@PathVariable Long id, @RequestBody HouseDto house) {
+        HouseDto houseDto = houseService.updateHouse(id, house);
+
+        return ResponseEntity.ok(CommonResponse.success(
+                HttpStatus.OK.value(),
+                houseDto
+        ));
+    }
+    @PatchMapping("/{id}")
+    public ResponseEntity<CommonResponse<HouseDto>> updateHousePartially(
+            @PathVariable Long id,
+            @RequestBody Map<String, Object> updates) {
+
+        HouseDto updatedHouseDto = houseService.updateHousePartially(id, updates);
+
+        return ResponseEntity.ok(CommonResponse.success(
+                HttpStatus.OK.value(),
+                updatedHouseDto
+        ));
+    }
+
 }
