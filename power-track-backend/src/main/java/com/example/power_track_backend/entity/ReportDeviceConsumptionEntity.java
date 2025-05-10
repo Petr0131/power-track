@@ -9,7 +9,6 @@ public class ReportDeviceConsumptionEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private Double totalConsumption;
     private Double dayConsumption;
     private Double nightConsumption;

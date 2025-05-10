@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 @Service
@@ -73,7 +75,7 @@ public class HouseService {
                 .collect(Collectors.toList());
     }
 
-    public HouseDto updateHouse(Long id, HouseDto houseDto) {
+    public HouseDto updateHouse(Long id, HouseDto houseDto) { //Todo убрать все 3 метода PUT из контроллеров и сервисов. House User Device.
         // Находим существующий дом по ID
         HouseEntity house = houseRepo.findById(id)
                 .orElseThrow(() -> new HouseNotFoundException("House not found with id: " + id));
@@ -105,5 +107,34 @@ public class HouseService {
         return house.getName();
     }
 
+    public HouseDto updateHousePartially(Long id, Map<String, Object> updates) {
+        // Находим дом по ID
+        HouseEntity houseEntity = houseRepo.findById(id)
+                .orElseThrow(() -> new HouseNotFoundException("House not found with id: " + id));
 
+        // Создаем мапу обработчиков для каждого поля
+        Map<String, Consumer<Object>> fieldUpdaters = Map.of(
+                "name", value -> houseEntity.setName(value.toString()),
+                "rooms", value -> houseEntity.setRooms(Integer.parseInt(value.toString())),
+                "residents", value -> houseEntity.setResidents(Integer.parseInt(value.toString())),
+                "dayTariff", value -> houseEntity.setDayTariff(Double.parseDouble(value.toString())),
+                "nightTariff", value -> houseEntity.setNightTariff(Double.parseDouble(value.toString()))
+        );
+
+        // Обновляем поля дома на основе входных данных
+        updates.forEach((key, value) -> {
+            Consumer<Object> updater = fieldUpdaters.get(key);
+            if (updater != null) {
+                updater.accept(value);
+            } else {
+                throw new IllegalArgumentException("Invalid field: " + key);
+            }
+        });
+
+        // Сохраняем обновленный дом в базе данных
+        HouseEntity updatedHouseEntity = houseRepo.save(houseEntity);
+
+        // Преобразуем сущность в DTO и возвращаем
+        return houseMapper.toDto(updatedHouseEntity);
+    }
 }

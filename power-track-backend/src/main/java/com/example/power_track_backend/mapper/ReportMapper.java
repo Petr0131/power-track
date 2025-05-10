@@ -13,9 +13,6 @@ public interface ReportMapper {
     @Mapping(target = "houseId", source = "houseEntity.id")
     ReportDto toDto(ReportEntity reportEntity);
 
-    @Mapping(target = "houseEntity.id", source = "houseId")
-    ReportEntity toEntity(ReportDto reportDto);
-
     // Todo Вынести в отдельный маппер?
     // ToDo Поиграться с параметрами которые нужно либо не нужно маппить
 

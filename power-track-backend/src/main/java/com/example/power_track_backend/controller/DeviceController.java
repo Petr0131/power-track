@@ -9,10 +9,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/users/{userId}/houses/{houseId}/devices")
-// @CrossOrigin(origins = "http://localhost:3000")  // Указываем фронтенд
 public class DeviceController {
     private final DeviceService deviceService;
 
@@ -69,7 +69,7 @@ public class DeviceController {
     public ResponseEntity<CommonResponse<DeviceDto>> updateDevice(
             @PathVariable Long id,
             @RequestBody DeviceDto deviceDto) {
-        DeviceDto updatedDeviceDto = deviceService.updateDevice(id, deviceDto);
+        DeviceDto updatedDeviceDto = deviceService.updateDevicePut(id, deviceDto);
 
         return ResponseEntity.ok(CommonResponse.success(
                 HttpStatus.OK.value(),
@@ -84,6 +84,19 @@ public class DeviceController {
         return ResponseEntity.ok(CommonResponse.success(
                 HttpStatus.OK.value(),
                 message
+        ));
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<CommonResponse<DeviceDto>> updateDevicePartially(
+            @PathVariable Long id,
+            @RequestBody Map<String, Object> updates) {
+
+        DeviceDto updatedDeviceDto = deviceService.updateDevicePartially(id, updates);
+
+        return ResponseEntity.ok(CommonResponse.success(
+                HttpStatus.OK.value(),
+                updatedDeviceDto
         ));
     }
 }

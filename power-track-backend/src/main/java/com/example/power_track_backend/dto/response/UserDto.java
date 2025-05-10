@@ -1,15 +1,12 @@
 package com.example.power_track_backend.dto.response;
 
-// Todo Решить стоит ли разделять на UserSummaryDto и UserDetailsDto.
-
 import com.example.power_track_backend.CurrencyType;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.ArrayList;
 import java.util.List;
 
-// @JsonInclude(JsonInclude.Include.NON_EMPTY) // Исключает null и пустые коллекции. Является более строгой версией "JsonInclude.Include.NON_NULL".
-@JsonInclude(JsonInclude.Include.NON_NULL) // Исключает null поля в ответе который приходит клиенту, когда он получает DTO.
+@JsonInclude(JsonInclude.Include.NON_NULL) // Исключает null поля в ответе который приходит клиенту, когда он получает DTO. // Todo убрать
 public class UserDto {
 
     private Long id;

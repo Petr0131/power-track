@@ -1,5 +1,6 @@
 package com.example.power_track_backend.service;
 
+import com.example.power_track_backend.UsageTimePeriod;
 import com.example.power_track_backend.dto.response.ReportDto;
 import com.example.power_track_backend.entity.DeviceEntity;
 import com.example.power_track_backend.entity.HouseEntity;
@@ -37,7 +38,6 @@ public class ReportService {
         this.deviceRepo = deviceRepo;
     }
 
-    // Генерация отчета для дома
     @Transactional
     public ReportDto generateReportForHouse(Long houseId) {
         // Находим дом по ID
@@ -54,7 +54,6 @@ public class ReportService {
         double totalConsumption = 0;
         double totalCost = 0;
 
-        // Создаем пустой отчет и сразу задаем базовые поля
         ReportEntity report = new ReportEntity();
         report.setStartDate(startDate);
         report.setEndDate(endDate);
@@ -64,10 +63,22 @@ public class ReportService {
         List<ReportDeviceConsumptionEntity> deviceConsumptions = new ArrayList<>();
 
         for (DeviceEntity device : devices) {
+            // Определяем временной период использования устройства
+            UsageTimePeriod usageTimePeriod = device.getUsageTimePeriod(); // Предполагается, что DeviceEntity имеет поле usageTimePeriod
+
+            // Рассчитываем потребление одного устройства
             double deviceConsumption = calculateDeviceConsumption(device, startDate, endDate);
-            double dayConsumption = deviceConsumption * 0.7;
-            double nightConsumption = deviceConsumption * 0.3;
-            double estimatedCost = dayConsumption * house.getDayTariff() + nightConsumption * house.getNightTariff();
+
+            // Учитываем количество устройств
+            int deviceQuantity = device.getCount() != null ? device.getCount() : 1; // Если количество не указано, считаем 1
+            deviceConsumption *= deviceQuantity;
+
+            // Рассчитываем дневное и ночное потребление с учетом UsageTimePeriod
+            double dayConsumption = deviceConsumption * usageTimePeriod.getDayFactor();
+            double nightConsumption = deviceConsumption * usageTimePeriod.getNightFactor();
+
+            // Рассчитываем стоимость
+            double estimatedCost = calculateDeviceCost(dayConsumption, nightConsumption, house.getDayTariff(), house.getNightTariff());
 
             // Накопление общих значений
             totalConsumption += deviceConsumption;
@@ -90,25 +101,18 @@ public class ReportService {
         report.setTotalConsumption(totalConsumption);
         report.setTotalCost(totalCost);
 
-        // Сохраняем отчет вместе с устройствами благодаря CascadeType.ALL
         ReportEntity savedReport = reportRepo.save(report);
 
-        // Возвращаем DTO
         return reportMapper.toDto(savedReport);
     }
 
-
-    // Пример расчета потребления устройства за период
     private double calculateDeviceConsumption(DeviceEntity device, LocalDate startDate, LocalDate endDate) {
         int daysInPeriod = (int) ChronoUnit.DAYS.between(startDate, endDate);
         return device.getPower() * device.getAverageDailyUsageMinutes() / 60.0 * daysInPeriod;
     }
 
     // Пример расчета стоимости потребления устройства
-    private double calculateDeviceCost(DeviceEntity device, double consumption, double dayTariff, double nightTariff) {
-        double dayConsumption = consumption * 0.7; // 70% потребления днем
-        double nightConsumption = consumption * 0.3; // 30% потребления ночью
-
+    private double calculateDeviceCost(double dayConsumption, double nightConsumption, double dayTariff, double nightTariff) {
         return dayConsumption * dayTariff + nightConsumption * nightTariff;
     }
 
@@ -150,12 +154,5 @@ public class ReportService {
                 .orElseThrow(() -> new ReportNotFoundException("Report not found with id: " + reportId));
         reportRepo.delete(report);
         return "Report deleted successfully: " + report.getId();
-    }
-
-    // Вспомогательный метод для расчета метрик отчета
-    private void calculateReportMetrics(ReportEntity report) {
-        // Пример расчета (замените на реальную логику)
-        report.setTotalConsumption(500.0); // Расчет общего потребления
-        report.setTotalCost(150.0);       // Расчет общей стоимости
     }
 }

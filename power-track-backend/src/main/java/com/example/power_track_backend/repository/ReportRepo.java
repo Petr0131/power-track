@@ -10,6 +10,5 @@ import java.util.Optional;
 public interface ReportRepo extends CrudRepository<ReportEntity, Long> {
     Optional<List<ReportEntity>> findByHouseEntityIdAndStartDateGreaterThanEqualAndEndDateLessThanEqual(
             Long houseId, LocalDate startDate, LocalDate endDate);
-
     List<ReportEntity> findAllByHouseEntityId(Long houseId);
 }

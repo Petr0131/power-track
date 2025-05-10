@@ -8,6 +8,5 @@ import org.mapstruct.MappingConstants;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface AdviceMapper {
     AdviceDto toDto(AdviceEntity adviceEntity);
-
     AdviceEntity toEntity(AdviceDto adviceDto);
 }

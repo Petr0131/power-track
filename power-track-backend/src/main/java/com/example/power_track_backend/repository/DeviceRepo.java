@@ -7,14 +7,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface DeviceRepo extends CrudRepository<DeviceEntity, Long> {
-    // Проверка существования такого имени дома у текущего пользователя
     boolean existsByNameAndHouseEntityId(String name, Long houseId);
-
     boolean existsByName(String name);
-
     Optional<DeviceEntity> findByName(String name);
-
     Optional<DeviceEntity> findByNameAndHouseEntityId(String name, Long houseId);
-
     List<DeviceEntity> findAllByHouseEntityId(Long houseId);
 }

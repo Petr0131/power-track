@@ -1,5 +1,8 @@
 package com.example.power_track_backend.service;
 
+import com.example.power_track_backend.DeviceProfile;
+import com.example.power_track_backend.EnergyEfficiencyCategory;
+import com.example.power_track_backend.UsageTimePeriod;
 import com.example.power_track_backend.dto.response.DeviceDto;
 import com.example.power_track_backend.entity.DeviceEntity;
 import com.example.power_track_backend.entity.HouseEntity;
@@ -10,11 +13,14 @@ import com.example.power_track_backend.exception.HouseNotFoundException;
 import com.example.power_track_backend.mapper.DeviceMapper;
 import com.example.power_track_backend.repository.DeviceRepo;
 import com.example.power_track_backend.repository.HouseRepo;
+import com.example.power_track_backend.repository.RecommendationRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,12 +28,14 @@ public class DeviceService {
 
     private final DeviceRepo deviceRepo;
     private final HouseRepo houseRepo;
+    private final RecommendationRepo recommendationRepo;
     private final DeviceMapper deviceMapper;
 
     @Autowired
-    public DeviceService(DeviceRepo deviceRepo, HouseRepo houseRepo, DeviceMapper deviceMapper) {
+    public DeviceService(DeviceRepo deviceRepo, HouseRepo houseRepo, RecommendationRepo recommendationRepo, DeviceMapper deviceMapper) {
         this.deviceRepo = deviceRepo;
         this.houseRepo = houseRepo;
+        this.recommendationRepo = recommendationRepo;
         this.deviceMapper = deviceMapper;
     }
 
@@ -71,7 +79,7 @@ public class DeviceService {
                 .collect(Collectors.toList());
     }
 
-    public DeviceDto updateDevice(Long id, DeviceDto deviceDto) {
+    public DeviceDto updateDevicePut(Long id, DeviceDto deviceDto) {
         // Находим существующее устройство по ID
         DeviceEntity device = deviceRepo.findById(id)
                 .orElseThrow(() -> new DeviceNotFoundException("Device not found with id: " + deviceDto.getId()));
@@ -88,6 +96,8 @@ public class DeviceService {
         device.setPower(deviceDto.getPower());
         device.setAverageDailyUsageMinutes(deviceDto.getAverageDailyUsageMinutes());
         device.setEnergyEfficiency(deviceDto.getEnergyEfficiency());
+        device.setUsageTimePeriod(deviceDto.getUsageTimePeriod());
+        device.setCount(deviceDto.getCount());
 
         // Сохраняем обновленное устройство
         DeviceEntity updatedDevice = deviceRepo.save(device);
@@ -110,9 +120,38 @@ public class DeviceService {
     public String deleteDeviceById(Long id) {
         DeviceEntity device = deviceRepo.findById(id)
                 .orElseThrow(() -> new DeviceNotFoundException("Device not found with id: " + id));
+        // Удаляем рекомендации по этому устройству
+        recommendationRepo.deleteByDeviceId(id);
 
         deviceRepo.deleteById(id);
 
         return device.getName();
+    }
+
+    public DeviceDto updateDevicePartially(Long id, Map<String, Object> updates) {
+        DeviceEntity deviceEntity = deviceRepo.findById(id)
+                .orElseThrow(() -> new DeviceNotFoundException("Device not found with id: " + id));
+
+        Map<String, Consumer<Object>> fieldUpdaters = Map.of(
+                "deviceProfile", value -> deviceEntity.setDeviceProfile(DeviceProfile.valueOf(value.toString().toUpperCase())),
+                "name", value -> deviceEntity.setName(value.toString()),
+                "power", value -> deviceEntity.setPower(Integer.parseInt(value.toString())),
+                "count", value -> deviceEntity.setCount(Integer.parseInt(value.toString())),
+                "averageDailyUsageMinutes", value -> deviceEntity.setAverageDailyUsageMinutes(Integer.parseInt(value.toString())),
+                "energyEfficiency", value -> deviceEntity.setEnergyEfficiency(EnergyEfficiencyCategory.valueOf(value.toString().toUpperCase())),
+                "usageTimePeriod", value -> deviceEntity.setUsageTimePeriod(UsageTimePeriod.valueOf(value.toString().toUpperCase()))
+        );
+
+        updates.forEach((key, value) -> {
+            Consumer<Object> updater = fieldUpdaters.get(key);
+            if (updater != null) {
+                updater.accept(value);
+            } else {
+                throw new IllegalArgumentException("Invalid field: " + key);
+            }
+        });
+
+        DeviceEntity updatedDeviceEntity = deviceRepo.save(deviceEntity);
+        return deviceMapper.toDto(updatedDeviceEntity);
     }
 }
