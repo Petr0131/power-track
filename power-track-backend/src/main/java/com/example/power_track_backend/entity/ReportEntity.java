@@ -21,6 +21,9 @@ public class ReportEntity {
     @JoinColumn(name = "house_id", nullable = false)
     private HouseEntity houseEntity;
     @OneToMany(mappedBy = "reportEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RecommendationEntity> recommendations = new ArrayList<>();
+
+    @OneToMany(mappedBy = "reportEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ReportDeviceConsumptionEntity> deviceConsumptions = new ArrayList<>();
 
     public Long getId() {
@@ -69,6 +72,14 @@ public class ReportEntity {
 
     public void setHouseEntity(HouseEntity houseEntity) {
         this.houseEntity = houseEntity;
+    }
+
+    public List<RecommendationEntity> getRecommendations() {
+        return recommendations;
+    }
+
+    public void setRecommendations(List<RecommendationEntity> recommendations) {
+        this.recommendations = recommendations;
     }
 
     public List<ReportDeviceConsumptionEntity> getDeviceConsumptions() {

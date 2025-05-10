@@ -2,6 +2,7 @@ package com.example.power_track_backend.entity;
 
 import com.example.power_track_backend.DeviceProfile;
 import com.example.power_track_backend.EnergyEfficiencyCategory;
+import com.example.power_track_backend.UsageTimePeriod;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -25,6 +26,10 @@ public class DeviceEntity {
     private Integer count;
     private Integer averageDailyUsageMinutes; // Время работы в день // ToDo добавить валидацию.
     private EnergyEfficiencyCategory energyEfficiency; // ToDo решить стоит ли оставить данное поле.
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UsageTimePeriod usageTimePeriod; // ToDo нужно будет указать значение по умолчанию.
+
     @ManyToOne
     @JoinColumn(name = "house_id", nullable = false)
     private HouseEntity houseEntity;
@@ -85,6 +90,14 @@ public class DeviceEntity {
 
     public void setEnergyEfficiency(EnergyEfficiencyCategory energyEfficiency) {
         this.energyEfficiency = energyEfficiency;
+    }
+
+    public UsageTimePeriod getUsageTimePeriod() {
+        return usageTimePeriod;
+    }
+
+    public void setUsageTimePeriod(UsageTimePeriod usageTimePeriod) {
+        this.usageTimePeriod = usageTimePeriod;
     }
 
     public HouseEntity getHouseEntity() {

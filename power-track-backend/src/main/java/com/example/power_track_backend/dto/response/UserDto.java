@@ -2,6 +2,7 @@ package com.example.power_track_backend.dto.response;
 
 // Todo Решить стоит ли разделять на UserSummaryDto и UserDetailsDto.
 
+import com.example.power_track_backend.CurrencyType;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ public class UserDto {
     private Long id;
     private String username;
     private String role;
+    private CurrencyType currencyType;
     private List<HouseDto> houseDtoList = new ArrayList<>();
 
     public Long getId() {
@@ -38,6 +40,14 @@ public class UserDto {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public CurrencyType getCurrencyType() {
+        return currencyType;
+    }
+
+    public void setCurrencyType(CurrencyType currencyType) {
+        this.currencyType = currencyType;
     }
 
     public List<HouseDto> getHouseDtoList() {
