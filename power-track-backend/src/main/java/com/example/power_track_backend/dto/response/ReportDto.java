@@ -7,7 +7,6 @@ import java.util.List;
 
 @JsonPropertyOrder({"id", "houseId"})
 public class ReportDto {
-
     private Long id;
     private LocalDate startDate;
     private LocalDate endDate;

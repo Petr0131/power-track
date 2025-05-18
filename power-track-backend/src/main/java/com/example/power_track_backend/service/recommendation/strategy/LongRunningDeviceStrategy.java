@@ -1,5 +1,6 @@
 package com.example.power_track_backend.service.recommendation.strategy;
 
+import com.example.power_track_backend.CalculationConstants;
 import com.example.power_track_backend.RecommendationPriority;
 import com.example.power_track_backend.entity.DeviceEntity;
 import com.example.power_track_backend.entity.HouseEntity;
@@ -38,17 +39,17 @@ public class LongRunningDeviceStrategy extends AbstractStrategy {
         Double potentialSavings = calculatePotentialSavings(device);
         RecommendationPriority priority = RecommendationPriority.HIGH;
         String userCurrencySymbol = report.getHouseEntity().getUserEntity().getCurrencyType().getSymbol();
-        final int targetUsageMinutes = device.getAverageDailyUsageMinutes() - 120; // ToDo нужно подумать о том чтобы вынести логику форматирования сообщения
+        final int targetUsageMinutes = device.getAverageDailyUsageMinutes() - 120;
 
         String messageTemplate =
-                        "Устройство %s (%s кВт) работает более %d часов в день. " +
-                        "Рекомендуется попробовать сократить время работы до %d часов, чтобы снизить энергопотребление. " +
+                        "Устройство %s (%s кВт) работает более %.2f часов в день. " +
+                        "Рекомендуется попробовать сократить время работы до %.2f часов, чтобы снизить энергопотребление. " +
                         "Потенциальная экономия составит - %.2f %s в месяц.";
 
         String formattedMessage = String.format(messageTemplate, device.getName(),
                 device.getPower(),
-                device.getAverageDailyUsageMinutes() / 60, // Текущее время работы в часах
-                targetUsageMinutes / 60, // Целевое время работы в часах
+                device.getAverageDailyUsageMinutes() / CalculationConstants.MINUTES_IN_HOUR,
+                targetUsageMinutes / CalculationConstants.MINUTES_IN_HOUR,
                 potentialSavings,
                 userCurrencySymbol);
 
@@ -64,12 +65,14 @@ public class LongRunningDeviceStrategy extends AbstractStrategy {
         Double nightTariff = house.getNightTariff();
 
         // Параметры текущего устройства
-        Integer power = device.getPower(); // Мощность в кВт
-        Integer averageDailyUsageMinutes = device.getAverageDailyUsageMinutes(); // Время работы в минутах
-        Integer count = device.getCount(); // Количество устройств
+        Integer power = device.getPower();
+        Integer averageDailyUsageMinutes = device.getAverageDailyUsageMinutes();
+        Integer count = device.getCount();
+
+        double powerInKw = power / CalculationConstants.WATT_TO_KILOWATT;
 
         // Определяем новое время работы (уменьшение на 2 часа)
-        int targetUsageMinutes = Math.max(0, averageDailyUsageMinutes - 2 * 60); // Уменьшаем на 2 часа (120 минут)
+        double targetUsageMinutes = Math.max(0, averageDailyUsageMinutes - 2 * CalculationConstants.MINUTES_IN_HOUR);
 
         // Определяем доли времени работы днем и ночью
         double dayUsageFraction = 0.0;
@@ -85,14 +88,14 @@ public class LongRunningDeviceStrategy extends AbstractStrategy {
                 nightUsageFraction = 1.0;
                 break;
             case BOTH_DAY_NIGHT:
-                dayUsageFraction = 0.6; // 60% днем
-                nightUsageFraction = 0.4; // 40% ночью
+                dayUsageFraction = 0.6;
+                nightUsageFraction = 0.4;
                 break;
         }
 
-        // Рассчитываем потребление энергии (в кВт·ч)
-        double currentDailyEnergyConsumption = (averageDailyUsageMinutes / 60.0) * power;
-        double newDailyEnergyConsumption = (targetUsageMinutes / 60.0) * power;
+        // Рассчитываем потребление энергии
+        double currentDailyEnergyConsumption = (averageDailyUsageMinutes / CalculationConstants.MINUTES_IN_HOUR) * powerInKw;
+        double newDailyEnergyConsumption = (targetUsageMinutes / CalculationConstants.MINUTES_IN_HOUR) * powerInKw;
 
         // Разделяем потребление на дневное и ночное
         double currentDayEnergyConsumption = currentDailyEnergyConsumption * dayUsageFraction;
@@ -112,8 +115,8 @@ public class LongRunningDeviceStrategy extends AbstractStrategy {
         double totalCurrentDailyCost = (currentDayCost + currentNightCost) * count;
         double totalNewDailyCost = (newDayCost + newNightCost) * count;
 
-        // Экономия в месяц (30 дней)
-        double monthlySavings = (totalCurrentDailyCost - totalNewDailyCost) * 30;
+        // Экономия в месяц
+        double monthlySavings = (totalCurrentDailyCost - totalNewDailyCost) * CalculationConstants.DAYS_IN_MONTH;
 
         return monthlySavings > 0 ? monthlySavings : 0.0;
     }

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class AlwaysOnDeviceSpecification implements Specification<DeviceEntity> {
-    private static final int ALWAYS_ON_THRESHOLD_MINUTES = 20 * 60; // 20 часов в минутах
+    private static final int ALWAYS_ON_THRESHOLD_MINUTES = 20 * 60;
     @Override
     public boolean isSatisfiedBy(DeviceEntity device) {
         return device.getAverageDailyUsageMinutes() >= ALWAYS_ON_THRESHOLD_MINUTES;

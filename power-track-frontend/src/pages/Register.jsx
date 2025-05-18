@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { registerUser } from '../api/authApi';
 import '../styles/global.css';
@@ -7,6 +7,12 @@ function Register() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+
+  // Сбрасываем состояние при монтировании
+  useEffect(() => {
+    setUsername('');
+    setPassword('');
+  }, []);
 
   const handleRegister = async (e) => {
     e.preventDefault();

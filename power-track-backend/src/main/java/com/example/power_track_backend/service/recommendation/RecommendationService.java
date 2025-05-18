@@ -14,7 +14,6 @@ import java.util.List;
 
 @Service
 public class RecommendationService {
-
     private final ReportRepo reportRepo;
     private final RecommendationMapper recommendationMapper;
     private final List<Strategy> strategies;

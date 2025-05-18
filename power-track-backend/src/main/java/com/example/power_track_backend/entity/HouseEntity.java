@@ -1,6 +1,9 @@
 package com.example.power_track_backend.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,10 +18,24 @@ public class HouseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotBlank(message = "House name cannot be null")
+    @Column(nullable = false)
     private String name;
+    @Min(value = 1, message = "Rooms must be at least 1")
+    @NotNull(message = "Rooms cannot be null")
+    @Column(nullable = false)
     private Integer rooms;
+    @Min(value = 1, message = "Residents must be at least 1")
+    @NotNull(message = "Residents cannot be null")
+    @Column(nullable = false)
     private Integer residents;
+    @Min(value = 0, message = "DayTariff must be at least 0")
+    @NotNull(message = "DayTariff cannot be null")
+    @Column(nullable = false)
     private Double dayTariff;
+    @Min(value = 0, message = "NightTariff must be at least 0")
+    @NotNull(message = "NightTariff cannot be null")
+    @Column(nullable = false)
     private Double nightTariff;
 
     @ManyToOne
@@ -63,9 +80,7 @@ public class HouseEntity {
         this.residents = residents;
     }
 
-    public Double getDayTariff() {
-        return dayTariff;
-    }
+    public Double getDayTariff() { return dayTariff; }
 
     public void setDayTariff(Double dayTariff) {
         this.dayTariff = dayTariff;

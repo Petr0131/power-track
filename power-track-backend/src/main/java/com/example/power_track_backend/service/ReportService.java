@@ -1,5 +1,6 @@
 package com.example.power_track_backend.service;
 
+import com.example.power_track_backend.CalculationConstants;
 import com.example.power_track_backend.UsageTimePeriod;
 import com.example.power_track_backend.dto.response.ReportDto;
 import com.example.power_track_backend.entity.DeviceEntity;
@@ -24,7 +25,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class ReportService {
-
     private final ReportRepo reportRepo;
     private final HouseRepo houseRepo;
     private final ReportMapper reportMapper;
@@ -64,7 +64,7 @@ public class ReportService {
 
         for (DeviceEntity device : devices) {
             // Определяем временной период использования устройства
-            UsageTimePeriod usageTimePeriod = device.getUsageTimePeriod(); // Предполагается, что DeviceEntity имеет поле usageTimePeriod
+            UsageTimePeriod usageTimePeriod = device.getUsageTimePeriod();
 
             // Рассчитываем потребление одного устройства
             double deviceConsumption = calculateDeviceConsumption(device, startDate, endDate);
@@ -108,7 +108,8 @@ public class ReportService {
 
     private double calculateDeviceConsumption(DeviceEntity device, LocalDate startDate, LocalDate endDate) {
         int daysInPeriod = (int) ChronoUnit.DAYS.between(startDate, endDate);
-        return device.getPower() * device.getAverageDailyUsageMinutes() / 60.0 * daysInPeriod;
+        return device.getPower() / CalculationConstants.WATT_TO_KILOWATT *
+                device.getAverageDailyUsageMinutes() / CalculationConstants.MINUTES_IN_HOUR * daysInPeriod;
     }
 
     // Пример расчета стоимости потребления устройства
@@ -117,7 +118,7 @@ public class ReportService {
     }
 
     // Получение отчета по ID
-    @Transactional // ToDo избавиться ли от @Transactional? Ленивая загрузка
+    @Transactional // ToDo избавиться от @Transactional? Ленивая загрузка
     public ReportDto getReportById(Long reportId) {
         ReportEntity report = reportRepo.findById(reportId)
                 .orElseThrow(() -> new ReportNotFoundException("Report not found with id: " + reportId));

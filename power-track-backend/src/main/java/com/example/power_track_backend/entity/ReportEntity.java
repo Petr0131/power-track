@@ -1,6 +1,8 @@
 package com.example.power_track_backend.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -12,9 +14,15 @@ public class ReportEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotNull(message = "Start date cannot be null")
     private LocalDate startDate;
+    @NotNull(message = "End date cannot be null")
     private LocalDate endDate;
+    @NotNull(message = "Total consumption cannot be null")
+    @Min(value = 0, message = "Total consumption must be at least 0")
     private Double totalConsumption;
+    @NotNull(message = "Total cost cannot be null")
+    @Min(value = 0, message = "Total cost must be at least 0")
     private Double totalCost;
 
     @ManyToOne

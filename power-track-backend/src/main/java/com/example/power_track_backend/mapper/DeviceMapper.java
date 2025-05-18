@@ -10,7 +10,6 @@ import org.mapstruct.MappingConstants;
 public interface DeviceMapper {
     DeviceDto toDto(DeviceEntity deviceEntity);
 
-    // ToDo затестить
     @Mapping(target = "houseEntity", ignore = true)
     @Mapping(target = "consumptionEntities", ignore = true)
     DeviceEntity toEntity(DeviceDto deviceDto);
