@@ -42,7 +42,7 @@ public class UserService {
         // Устанавливаем роль по умолчанию, если она не указана
         user.setRole(userRegisterDto.getRole() != null && !userRegisterDto.getRole().trim().isEmpty()
                 ? userRegisterDto.getRole()
-                : "USER");
+                : "ROLE_USER");
 
         // Устанавливаем валюту по умолчанию, если она не указана
         user.setCurrencyType(userRegisterDto.getCurrencyType() != null
