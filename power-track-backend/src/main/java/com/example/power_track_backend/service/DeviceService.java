@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class DeviceService {
-
     private final DeviceRepo deviceRepo;
     private final HouseRepo houseRepo;
     private final RecommendationRepo recommendationRepo;

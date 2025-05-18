@@ -20,12 +20,11 @@ public class RecommendationFactory {
                 .build();
     }
 
-    // ToDo кастомная рекомендация. createRecommendationWithPotentialSavings
-    public RecommendationEntity createRecommendationWithPotentialSavings(ReportEntity report, DeviceEntity device, String customMessage, Double potentialSavings, RecommendationPriority priority) {
+    // Рекомендация для дома в целом
+    public RecommendationEntity createRecommendationForHouse(ReportEntity report, String customMessage, Double potentialSavings, RecommendationPriority priority) {
         return RecommendationBuilder.builder()
                 .message(customMessage)
                 .house(report.getHouseEntity())
-                .device(device)
                 .report(report)
                 .potentialSavings(potentialSavings)
                 .build();

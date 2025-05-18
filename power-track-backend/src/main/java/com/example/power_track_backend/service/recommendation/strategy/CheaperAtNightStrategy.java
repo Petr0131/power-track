@@ -1,5 +1,6 @@
 package com.example.power_track_backend.service.recommendation.strategy;
 
+import com.example.power_track_backend.CalculationConstants;
 import com.example.power_track_backend.RecommendationPriority;
 import com.example.power_track_backend.entity.DeviceEntity;
 import com.example.power_track_backend.entity.HouseEntity;
@@ -79,12 +80,14 @@ public class CheaperAtNightStrategy extends AbstractStrategy {
         Integer power = device.getPower();
         Integer count = device.getCount();
 
-        double dailyEnergyConsumption = (averageDailyUsageMinutes / 60.0) * power;
+        double powerInKw = power / CalculationConstants.WATT_TO_KILOWATT;
+
+        double dailyEnergyConsumption = (averageDailyUsageMinutes / CalculationConstants.MINUTES_IN_HOUR) * powerInKw;
 
         double tariffDifference = dayTariff - nightTariff;
 
         double dailySavings = dailyEnergyConsumption * tariffDifference;
 
-        return dailySavings * count * 30;
+        return dailySavings * count * CalculationConstants.DAYS_IN_MONTH;
     }
 }

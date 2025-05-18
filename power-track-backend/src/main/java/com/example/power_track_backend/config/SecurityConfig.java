@@ -3,7 +3,6 @@ package com.example.power_track_backend.config;
 import com.example.power_track_backend.filter.JwtAuthorizationFilter;
 import com.example.power_track_backend.service.JwtService;
 import com.example.power_track_backend.service.MyUserDetailsService;
-import com.example.power_track_backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,7 +23,6 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-
     private final MyUserDetailsService myUserDetailsService;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
@@ -39,10 +37,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .csrf(csrf -> csrf.disable()) // Отключаем CSRF для API
+                .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Добавляем CORS
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll() // Разрешаем доступ к эндпоинтам аутентификации
+                        .requestMatchers("/auth/**").permitAll()
                         .anyRequest().authenticated()) // Все остальные запросы требуют аутентификации
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Без сессий
                 .addFilterBefore(new JwtAuthorizationFilter(myUserDetailsService, jwtService), UsernamePasswordAuthenticationFilter.class)
@@ -52,10 +50,10 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:5173")); // URL вашего React-приложения
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")); // Разрешенные HTTP-методы
-        configuration.setAllowedHeaders(List.of("*")); // Разрешаем все заголовки
-        configuration.setAllowCredentials(true); // Разрешаем передачу куки и авторизационных заголовков
+        configuration.setAllowedOrigins(List.of("http://localhost:5173"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration); // Применяем CORS ко всем эндпоинтам

@@ -1,12 +1,16 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 import { loginUser } from '../api/authApi';
 import '../styles/global.css';
 
 function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const navigate = useNavigate();
+
+  // Сбрасываем состояние при монтировании
+  useEffect(() => {
+    setUsername('');
+    setPassword('');
+  }, []);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -19,7 +23,8 @@ function Login() {
       localStorage.setItem('userId', userId);
       localStorage.setItem('username', userUsername);
 
-      navigate('/dashboard'); // Перенаправляем на Dashboard
+      // Принудительно обновляем страницу для корректной работы маршрутизации
+      window.location.href = '/dashboard'; // Перенаправляем на Dashboard
     } catch (error) {
       console.error('Login failed:', error);
       alert('Неверное имя пользователя или пароль');

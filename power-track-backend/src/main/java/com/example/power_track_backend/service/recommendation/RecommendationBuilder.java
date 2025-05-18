@@ -48,7 +48,6 @@ public class RecommendationBuilder {
     }
 
     public RecommendationEntity build() {
-        // ToDo добавить валидацию.
         return recommendation;
     }
 }
