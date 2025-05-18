@@ -14,7 +14,6 @@ import java.util.Random;
 
 @Service
 public class AdviceService {
-
     private final AdviceRepo adviceRepo;
     private final AdviceMapper adviceMapper;
 

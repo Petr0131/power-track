@@ -19,7 +19,6 @@ import java.util.function.Consumer;
 
 @Service
 public class UserService {
-
     private final UserRepo userRepo;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
@@ -39,11 +38,19 @@ public class UserService {
         //ToDo код ниже следует вынести в маппер.
         UserEntity user = new UserEntity();
         user.setUsername(userRegisterDto.getUsername());
-        user.setRole(userRegisterDto.getRole());
+
+        // Устанавливаем роль по умолчанию, если она не указана
+        user.setRole(userRegisterDto.getRole() != null && !userRegisterDto.getRole().trim().isEmpty()
+                ? userRegisterDto.getRole()
+                : "USER");
+
+        // Устанавливаем валюту по умолчанию, если она не указана
+        user.setCurrencyType(userRegisterDto.getCurrencyType() != null
+                ? userRegisterDto.getCurrencyType()
+                : CurrencyType.RUB);
 
         // Модификация passwordEncoder
         user.setPassword(passwordEncoder.encode(userRegisterDto.getPassword()));
-        user.setCurrencyType(userRegisterDto.getCurrencyType());
 
         userRepo.save(user);
         return userMapper.toDto(user);

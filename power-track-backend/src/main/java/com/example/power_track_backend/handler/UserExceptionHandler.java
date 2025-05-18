@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @Order(Ordered.HIGHEST_PRECEDENCE) // Повышаем приоритет относительно GlobalExceptionHandler
 @ControllerAdvice
 public class UserExceptionHandler {
-
     @ExceptionHandler(UserAlreadyExistException.class)
     public ResponseEntity<CommonResponse<?>> handleUserAlreadyExists(UserAlreadyExistException e) {
         return ResponseEntity.status(HttpStatus.CONFLICT)

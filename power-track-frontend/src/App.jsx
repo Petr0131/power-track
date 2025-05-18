@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import AddHouseForm from './pages/AddHouseForm';
-import HousePage from './pages/HousePage'; // Импортируем новый компонент
-import AddDeviceForm from './pages/AddDeviceForm'; // Импортируем форму добавления устройства
+import HousePage from './pages/HousePage';
+import AddDeviceForm from './pages/AddDeviceForm';
 import ReportDetailsPage from './pages/ReportDetailsPage';
 import DeviceDetailsPage from './pages/DeviceDetailsPage';
 import EditDeviceForm from './pages/EditDeviceForm';
@@ -14,7 +14,17 @@ import EditHouseForm from './pages/EditHouseForm';
 import './styles/global.css';
 
 function App() {
-  const isAuthenticated = !!localStorage.getItem('token'); // Проверяем, есть ли токен
+  const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token'));
+
+  // Обновляем состояние при изменении localStorage
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setIsAuthenticated(!!localStorage.getItem('token'));
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
 
   return (
     <Router>
@@ -33,11 +43,11 @@ function App() {
           element={isAuthenticated ? <AddHouseForm /> : <Navigate to="/login" />}
         />
         <Route
-          path="/house/:houseId" // Динамический маршрут для страницы дома
+          path="/house/:houseId"
           element={isAuthenticated ? <HousePage /> : <Navigate to="/login" />}
         />
         <Route
-          path="/add-device/:houseId" // Динамический маршрут для добавления устройства
+          path="/add-device/:houseId"
           element={isAuthenticated ? <AddDeviceForm /> : <Navigate to="/login" />}
         />
         <Route

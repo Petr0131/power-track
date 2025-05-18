@@ -14,7 +14,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/users/{userId}/houses/{houseId}/reports")
 public class ReportController {
-
     private final ReportService reportService;
 
     @Autowired

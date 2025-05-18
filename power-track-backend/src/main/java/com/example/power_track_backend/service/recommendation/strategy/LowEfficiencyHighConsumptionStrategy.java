@@ -1,5 +1,6 @@
 package com.example.power_track_backend.service.recommendation.strategy;
 
+import com.example.power_track_backend.CalculationConstants;
 import com.example.power_track_backend.EnergyEfficiencyCategory;
 import com.example.power_track_backend.RecommendationPriority;
 import com.example.power_track_backend.entity.DeviceEntity;
@@ -39,12 +40,12 @@ public class LowEfficiencyHighConsumptionStrategy extends AbstractStrategy {
         Double potentialSavings = calculatePotentialSavings(device);
         RecommendationPriority priority = RecommendationPriority.HIGH;
         String userCurrencySymbol = report.getHouseEntity().getUserEntity().getCurrencyType().getSymbol();
-        String deviceCategory = device.getEnergyEfficiency().getLabel(); // ToDo нужно подумать о том чтобы вынести логику форматирования сообщения
+        String deviceCategory = device.getEnergyEfficiency().getLabel();
 
         String messageTemplate =
                         "Устройство %s имеет низкий класс энергоэффективности - %s и высокое энергопотребление (%s кВт). " +
                         "Рекомендуется заменить его на более энергоэффективную модель. " +
-                        "Потенциальная экономия составит - %s %s в месяц.";
+                        "Потенциальная экономия составит - %.2f %s в месяц.";
 
         String formattedMessage = String.format(messageTemplate, device.getName(), deviceCategory, device.getPower(), potentialSavings, userCurrencySymbol);
 
@@ -59,15 +60,17 @@ public class LowEfficiencyHighConsumptionStrategy extends AbstractStrategy {
         Double nightTariff = house.getNightTariff();
 
         // Параметры текущего устройства
-        Integer power = device.getPower(); // Мощность в кВт
-        Integer averageDailyUsageMinutes = device.getAverageDailyUsageMinutes(); // Время работы в минутах
-        Integer count = device.getCount(); // Количество устройств
+        Integer power = device.getPower();
+        Integer averageDailyUsageMinutes = device.getAverageDailyUsageMinutes();
+        Integer count = device.getCount();
 
         // Класс энергоэффективности текущего устройства
         EnergyEfficiencyCategory currentEfficiency = device.getEnergyEfficiency();
 
         // Класс энергоэффективности нового устройства (высший класс)
         EnergyEfficiencyCategory newEfficiency = EnergyEfficiencyCategory.A;
+
+        double powerInKw = power / CalculationConstants.WATT_TO_KILOWATT;
 
         // Определяем доли времени работы днем и ночью
         double dayUsageFraction = 0.0;
@@ -83,13 +86,13 @@ public class LowEfficiencyHighConsumptionStrategy extends AbstractStrategy {
                 nightUsageFraction = 1.0;
                 break;
             case BOTH_DAY_NIGHT:
-                dayUsageFraction = 0.6; // 60% днем
-                nightUsageFraction = 0.4; // 40% ночью
+                dayUsageFraction = 0.6;
+                nightUsageFraction = 0.4;
                 break;
         }
 
-        // Рассчитываем потребление энергии (в кВт·ч)
-        double dailyEnergyConsumptionCurrent = (averageDailyUsageMinutes / 60.0) * power;
+        // Рассчитываем потребление энергии
+        double dailyEnergyConsumptionCurrent = (averageDailyUsageMinutes / CalculationConstants.MINUTES_IN_HOUR) * powerInKw;
         double dailyEnergyConsumptionNew = dailyEnergyConsumptionCurrent * (newEfficiency.getCoefficient() / currentEfficiency.getCoefficient());
 
         // Разделяем потребление на дневное и ночное
@@ -110,8 +113,8 @@ public class LowEfficiencyHighConsumptionStrategy extends AbstractStrategy {
         double totalDailyCostCurrent = (dayCostCurrent + nightCostCurrent) * count;
         double totalDailyCostNew = (dayCostNew + nightCostNew) * count;
 
-        // Экономия в месяц (30 дней)
-        double monthlySavings = (totalDailyCostCurrent - totalDailyCostNew) * 30;
+        // Экономия в месяц
+        double monthlySavings = (totalDailyCostCurrent - totalDailyCostNew) * CalculationConstants.DAYS_IN_MONTH;
 
         return monthlySavings > 0 ? monthlySavings : 0.0; // Возвращаем только положительную экономию
     }

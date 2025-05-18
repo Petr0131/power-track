@@ -6,9 +6,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import java.util.ArrayList;
 import java.util.List;
 
-@JsonInclude(JsonInclude.Include.NON_NULL) // Исключает null поля в ответе который приходит клиенту, когда он получает DTO. // Todo убрать
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDto {
-
     private Long id;
     private String username;
     private String role;

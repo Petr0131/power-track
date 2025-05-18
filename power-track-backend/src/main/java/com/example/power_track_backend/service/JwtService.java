@@ -3,7 +3,6 @@ package com.example.power_track_backend.service;
 import com.example.power_track_backend.config.JwtConfig;
 import com.example.power_track_backend.config.MyUserDetails;
 import com.example.power_track_backend.dto.request.UserLoginDto;
-import com.example.power_track_backend.repository.UserRepo;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -25,11 +24,10 @@ import java.util.function.Function;
 
 @Service
 public class JwtService {
-
     private final JwtConfig jwtConfig;
     private final SecretKey secretKey;
     private final AuthenticationManager authenticationManager;
-    private final MyUserDetailsService myUserDetailsService; //Todo Как например тут я его внедрил вместе UserService
+    private final MyUserDetailsService myUserDetailsService;
 
     @Autowired
     public JwtService(@Lazy AuthenticationManager authenticationManager, MyUserDetailsService myUserDetailsService, JwtConfig jwtConfig) {

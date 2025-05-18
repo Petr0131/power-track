@@ -1,5 +1,6 @@
 package com.example.power_track_backend.service.recommendation.strategy;
 
+import com.example.power_track_backend.CalculationConstants;
 import com.example.power_track_backend.RecommendationPriority;
 import com.example.power_track_backend.entity.DeviceEntity;
 import com.example.power_track_backend.entity.HouseEntity;
@@ -46,18 +47,21 @@ public class HighConsumptionStrategy extends AbstractStrategy {
         return recommendationFactory.createBaseRecommendation(report, device, formattedMessage, potentialSavings, priority);
     }
 
-    // ToDo возможно стоит вынести calculatePotentialSavings из всех стратегий.
+    // ToDo возможно стоит вынести общую логику calculatePotentialSavings из всех стратегий.
+    // ToDo нужно вынести общую логику форматирования сообщения
     private Double calculatePotentialSavings(DeviceEntity device) {
 
-        HouseEntity house = device.getHouseEntity(); // ToDo возможно все таки стоит явно передавать сущность дома в метод. тк возможно нарушение SRP
+        HouseEntity house = device.getHouseEntity();
         // Получаем тарифы из дома
         Double dayTariff = house.getDayTariff();
         Double nightTariff = house.getNightTariff();
 
         // Получаем мощность устройства и время работы
-        Integer power = device.getPower(); // Мощность в кВт
-        Integer averageDailyUsageMinutes = device.getAverageDailyUsageMinutes(); // Среднее время работы в минутах
-        Integer count = device.getCount(); // Количество одинаковых устройств
+        Integer power = device.getPower();
+        Integer averageDailyUsageMinutes = device.getAverageDailyUsageMinutes();
+        Integer count = device.getCount();
+
+        double powerInKw = power / CalculationConstants.WATT_TO_KILOWATT;
 
         // Определяем доли времени работы днем и ночью
         double dayUsageFraction = 0.0;
@@ -73,13 +77,13 @@ public class HighConsumptionStrategy extends AbstractStrategy {
                 nightUsageFraction = 1.0;
                 break;
             case BOTH_DAY_NIGHT:
-                dayUsageFraction = 0.6; // 60% днем
-                nightUsageFraction = 0.4; // 40% ночью
+                dayUsageFraction = 0.6;
+                nightUsageFraction = 0.4;
                 break;
         }
 
         // Рассчитываем потребление энергии (в кВт·ч)
-        double dailyEnergyConsumption = (averageDailyUsageMinutes / 60.0) * power;
+        double dailyEnergyConsumption = (averageDailyUsageMinutes / CalculationConstants.MINUTES_IN_HOUR) * powerInKw;
         double dayEnergyConsumption = dailyEnergyConsumption * dayUsageFraction;
         double nightEnergyConsumption = dailyEnergyConsumption * nightUsageFraction;
 
@@ -90,6 +94,6 @@ public class HighConsumptionStrategy extends AbstractStrategy {
         // Общая стоимость использования устройства в день
         double totalDailyCost = (dayCost + nightCost) * count;
 
-        return totalDailyCost * 0.2; // ToDo Нужно 0.2 вынести в константу
+        return totalDailyCost * 0.2;
     }
 }

@@ -13,7 +13,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/recommendation")
 public class RecommendationController {
-
     private final RecommendationService recommendationService;
 
     @Autowired

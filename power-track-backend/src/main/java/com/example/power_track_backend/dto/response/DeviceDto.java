@@ -5,13 +5,12 @@ import com.example.power_track_backend.EnergyEfficiencyCategory;
 import com.example.power_track_backend.UsageTimePeriod;
 
 public class DeviceDto {
-
     private Long id;
     private DeviceProfile deviceProfile;
     private String name;
     private Integer power;
     private Integer Count;
-    private Integer averageDailyUsageMinutes; // Время работы в день // ToDo добавить валидацию.
+    private Integer averageDailyUsageMinutes; // Время работы в день
     private EnergyEfficiencyCategory energyEfficiency;
     private UsageTimePeriod usageTimePeriod;
 
@@ -59,17 +58,13 @@ public class DeviceDto {
         return averageDailyUsageMinutes;
     }
 
-    public void setAverageDailyUsageMinutes(Integer averageDailyUsageMinutes) {
-        this.averageDailyUsageMinutes = averageDailyUsageMinutes;
-    }
+    public void setAverageDailyUsageMinutes(Integer averageDailyUsageMinutes) { this.averageDailyUsageMinutes = averageDailyUsageMinutes; }
 
     public EnergyEfficiencyCategory getEnergyEfficiency() {
         return energyEfficiency;
     }
 
-    public void setEnergyEfficiency(EnergyEfficiencyCategory energyEfficiency) {
-        this.energyEfficiency = energyEfficiency;
-    }
+    public void setEnergyEfficiency(EnergyEfficiencyCategory energyEfficiency) { this.energyEfficiency = energyEfficiency; }
 
     public UsageTimePeriod getUsageTimePeriod() {
         return usageTimePeriod;

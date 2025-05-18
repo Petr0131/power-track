@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 public class LowEfficiencySpecification implements Specification<DeviceEntity>{
     @Override
     public boolean isSatisfiedBy(DeviceEntity device) {
-        // ToDo протестировать работоспособность.
         return device.getEnergyEfficiency().getCoefficient() >= EnergyEfficiencyCategory.C.getCoefficient();
     }
 }

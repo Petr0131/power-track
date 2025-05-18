@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractStrategy implements Strategy {
-
     protected final RecommendationMapper recommendationMapper;
     protected final RecommendationRepo recommendationRepo;
 

@@ -15,7 +15,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/advice")
 public class AdviceController {
-
     private final AdviceService adviceService;
 
     public AdviceController(AdviceService adviceService) {

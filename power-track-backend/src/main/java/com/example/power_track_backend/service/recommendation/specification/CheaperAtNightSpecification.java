@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 public class CheaperAtNightSpecification implements Specification<DeviceEntity>{
     @Override
     public boolean isSatisfiedBy(DeviceEntity device){
-        HouseEntity house = device.getHouseEntity(); // ToDo явная передача или так?
+        HouseEntity house = device.getHouseEntity();
         return house.getNightTariff() < house.getDayTariff();
     }
 }

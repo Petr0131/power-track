@@ -1,10 +1,8 @@
 package com.example.power_track_backend.controller;
 
-import com.example.power_track_backend.dto.request.UserRegisterDto;
 import com.example.power_track_backend.dto.response.CommonResponse;
 import com.example.power_track_backend.dto.response.UserDto;
 import com.example.power_track_backend.service.UserService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +14,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("/users")
 public class UserController {
-
     private final UserService userService;
 
     @Autowired
